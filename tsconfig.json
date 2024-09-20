@@ -1,0 +1,33 @@
+{
+    "ts-node": {
+        "files": true
+    },
+    "compilerOptions": {
+        "baseUrl": "src",
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "paths": {
+            "config/*": ["config/*"],
+            "controllers/*": ["controllers/*"],
+            "middleware/*": ["middleware/*"],
+            "routes/*": ["routes/*"],
+            "services/*": ["services/*"],
+            "types/*": ["types/*"],
+            "utils/*": ["utils/*"],
+            "validation/*": ["validation/*"],
+            "__mocks__/*": ["../__mocks__/*"],
+            "root/*": ["../*"]
+        },
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "sourceMap": true,
+        "target": "ESNext"
+    },
+    "exclude": ["**/__mocks__/*"]
+}

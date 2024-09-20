@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  binaryTargets   = ["native", "linux-musl"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  username     String?         @unique
+  email        String        @unique
+  name         String?
+  password     String?
+  address      String?
+  phone        String?
+  avatar       String?
+  active       Boolean        @default(true)
+  verified     Boolean        @default(false)
+  role         Role           @default(user)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+  Session      Session[]
+  Otp          Otp[]
+  ProfileUser  ProfileUser[]
+  moodUser     MoodUser[]
+  Conversation Conversation[]
+  @@map("users")
+}
+
+
+model Session {
+  id        Int?      @default(autoincrement())
+  token     String    @unique
+  userId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
+}
+
+model Otp {
+  id        Int      @unique @default(autoincrement())
+  code      Int      
+  userId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  user      User      @relation(fields: [userId], references: [id])
+
+}
+
+
+model ProfileUser {
+  id        Int      @default(autoincrement()) @id
+  userId    Int
+  nama      String
+  gender    String
+  username  String?
+  foto      String?
+  description String?
+  // old
+  // mood        String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("profile_users")
+}
+
+
+model MoodUser {
+  id        Int      @default(autoincrement()) @id
+  userId    Int
+  emoticon  emoticonType @default(indifferent) 
+  description      String?
+  date      DateTime?
+  type      typeMood
+  responseAi String? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("mood_users")
+}
+
+enum emoticonType {
+  indifferent
+  confused
+  happy
+  sad
+  angry
+}
+
+enum typeMood {
+  career
+  family 
+  love
+  friends
+}
+
+
+model Conversation {
+  id       Int      @default(autoincrement()) @id
+  userId   Int
+  uuid     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  user     User     @relation(fields: [userId], references: [id])
+  DetailConversation  DetailConversation[]
+}
+
+model DetailConversation {
+  id            Int      @default(autoincrement()) @id
+  conversationId Int
+  response       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+  isUser         Boolean @default(false)
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}

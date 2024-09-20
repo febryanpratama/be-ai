@@ -1,0 +1,35 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "silently-remove-extras",
+  "controllerPathGlobs": ["src/controllers/**/*.ts"],
+  "spec": {
+    "outputDirectory": "build",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "build",
+    "authenticationModule": "src/middleware/context.ts"
+  },
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "config/*": ["config/*"],
+      "controllers/*": ["controllers/**/*.ts"],
+      "middleware/*": ["middleware/*"],
+      "routes/*": ["routes/*"],
+      "services/*": ["services/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"],
+      "validation/*": ["validation/*"],
+      "__mocks__/*": ["../__mocks__/*"],
+      "root/*": ["../*"]
+    }
+  }
+}
