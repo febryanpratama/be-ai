@@ -125,6 +125,7 @@ model Conversation {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   user     User     @relation(fields: [userId], references: [id])
+  isEndConversation Boolean @default(false)
   DetailConversation  DetailConversation[]
 }
 
@@ -136,5 +137,6 @@ model DetailConversation {
   updatedAt      DateTime @updatedAt
   deletedAt      DateTime?
   isUser         Boolean @default(false)
+  readeble       Boolean @default(false)
   conversation   Conversation @relation(fields: [conversationId], references: [id])
 }

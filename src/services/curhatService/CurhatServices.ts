@@ -1,5 +1,7 @@
 import { client } from "root/src/db/db"
 import IntegrationChatGpt from "root/src/integration/IntegrationChatGpt"
+import { ApiError } from "utils/apiError";
+import { errors } from "config/errors";
 import { v4 as uuidv4 } from "uuid";
 
 
@@ -11,12 +13,8 @@ class CurhatServices {
             where: {
                 userId
             },
-            include: {
-                DetailConversation: {
-                    orderBy: {
-                        createdAt: "asc"
-                    }
-                }
+            orderBy: {
+                createdAt: "desc" // Sort by newest date first
             }
         })
 
@@ -80,6 +78,7 @@ class CurhatServices {
     
     public detailCurhat = async (body: any, userId: number): Promise<any> => {
      
+        // get detail by newest date
         const detailConversation = await client().detailConversation.findMany({
             where: {
                 conversationId: body.conversation_id,
@@ -88,6 +87,9 @@ class CurhatServices {
                 }
             },include: {
                 conversation: true
+            },
+            orderBy: {
+                createdAt: "desc"
             }
         })
 
@@ -99,7 +101,8 @@ class CurhatServices {
             data: {
                 conversationId: body.conversation_id,
                 response: body.prompt,
-                isUser: true
+                isUser: true,
+                readeble: true
             }
         })
 
@@ -109,19 +112,91 @@ class CurhatServices {
             data: {
                 conversationId: body.conversation_id,
                 response: resp.response,
-                isUser: false
+                isUser: false,
+                readeble: true
             }
         })
 
         const listDetailConversation = await client().detailConversation.findMany({
             where: {
-                conversationId: body.conversation_id
+                conversationId: body.conversation_id,
+                readeble: true
             }
         })
 
 
         return listDetailConversation;
     }
+
+    public storeSessionCurhat = async (userId: number): Promise<any> => {
+        const getDetailUser = await client().profileUser.findFirst({
+            where: {
+                userId
+            }
+        })
+
+        if (!getDetailUser) {
+            throw new ApiError(errors.INVALID_DETAIL_PROFILE);
+        }
+
+        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
+
+        const storeConversation = await this._storeConversation({}, userId);
+
+        const body = {
+            conversation_id: storeConversation.id,
+            prompt : prompt
+        }
+
+        const storeDetailConverstaion = await this.storeDetailCurhatSession(body, userId);
+
+
+        return storeConversation;
+
+    }
+
+
+    public getListDetailConversation = async (conversationId: number): Promise<any> => {
+        const listDetailConversation = await client().detailConversation.findMany({
+            where: {
+                conversationId,
+                readeble: true
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        })
+
+        return listDetailConversation
+    }
+
+    public storeDetailCurhatSession = async (body: any, userId: number): Promise<any> => {
+        const storeDetailConverstaion = await client().detailConversation.create({
+            data: {
+                conversationId: body.conversation_id,
+                response: body.prompt,
+                isUser: true,
+                readeble: false
+            }
+        })
+
+        const resp = await IntegrationChatGpt.postMbti(body.prompt);
+
+        const storeDetailConverstaionAI = await client().detailConversation.create({
+            data: {
+                conversationId: body.conversation_id,
+                response: resp.response,
+                isUser: false,
+                readeble: true
+            }
+        })
+
+        const listDetailConversation = this.getListDetailConversation(body.conversation_id);
+
+
+        return listDetailConversation;
+    }
+    
 }
 
 export default new CurhatServices();

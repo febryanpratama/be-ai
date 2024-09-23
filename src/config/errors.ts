@@ -120,5 +120,10 @@ export const errors = {
     httpCode: 400,
     errorCode: 400027,
     description: "Invalid type emoticon"
-  },  
+  },
+  INVALID_DETAIL_PROFILE: {
+    httpCode: 400,
+    errorCode: 400028,
+    description: "Invalid Detail Profile User. You Must Set Profile First!!"
+  } 
 }
