@@ -8,13 +8,14 @@ import { errors } from "config/errors";
 
 dotenv.config();
 const BASE_SERVER_CHATGPT = process.env.BASE_SERVER_CHATGPT || "";
-const endpointGenerate = "/api/generate/text-assistant"
+const endpointGenerateUser = "/api/generate/text"
+const endpointGenerateAssistant = "/api/generate/text-assistant"
 
 class IntegrationChatGpt {
     public postMbti = async (prompt: string): Promise<any> => {
         try {
-            console.debug("FETCHING DATA FROM SERVER POST MBTI", endpointGenerate);
-            const response = await axios.post(BASE_SERVER_CHATGPT + endpointGenerate, {
+            console.debug("FETCHING DATA FROM SERVER POST MBTI", endpointGenerateUser);
+            const response = await axios.post(BASE_SERVER_CHATGPT + endpointGenerateUser, {
                 prompt
             })
             console.debug("RESPONSE POST MBTI", response.data);
@@ -28,7 +29,7 @@ class IntegrationChatGpt {
 
     public storeChatgpt = async (prompt: any): Promise<any> => {
         try {
-            const response = await axios.post(BASE_SERVER_CHATGPT + endpointGenerate, {
+            const response = await axios.post(BASE_SERVER_CHATGPT + endpointGenerateAssistant, {
                 prompt
             })
             return response.data.result;

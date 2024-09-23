@@ -113,7 +113,7 @@ class CurhatServices {
             }
         })
 
-        const getListDetailConversation = await this.getListDetailConversation(body.conversation_id);
+        const getListDetailConversation = await this.getListAllDetailConversation(body.conversation_id);
 
         const messagePrompt : promptInterface[] = [];
 
@@ -125,9 +125,6 @@ class CurhatServices {
         });
 
         const resp = await IntegrationChatGpt.storeChatgpt(messagePrompt);
-
-        console.debug("========================Response from ai")
-        console.debug(resp);
 
         const storeDetailConverstaionAI = await client().detailConversation.create({
             data: {
@@ -160,7 +157,7 @@ class CurhatServices {
             throw new ApiError(errors.INVALID_DETAIL_PROFILE);
         }
 
-        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
+        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat. serta tolong berikan response positf tanpa mengandung unsur Negative thought patterns"
 
         const storeConversation = await this._storeConversation({}, userId);
 
@@ -218,6 +215,20 @@ class CurhatServices {
 
 
         return listDetailConversation;
+    }
+
+
+    public getListAllDetailConversation = async (conversationId: number): Promise<any> => {
+        const listDetailConversation = await client().detailConversation.findMany({
+            where: {
+                conversationId,
+            },
+            orderBy: {
+                createdAt: "asc"
+            }
+        })
+
+        return listDetailConversation
     }
     
 }
