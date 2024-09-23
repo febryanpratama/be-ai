@@ -14,7 +14,7 @@ class CurhatServices {
                 userId
             },
             orderBy: {
-                createdAt: "desc" // Sort by newest date first
+                createdAt: "asc" // Sort by newest date first
             }
         })
 
@@ -84,12 +84,13 @@ class CurhatServices {
                 conversationId: body.conversation_id,
                 conversation: {
                     userId // Adjust this according to your schema
-                }
+                },
+                readeble: true
             },include: {
                 conversation: true
             },
             orderBy: {
-                createdAt: "desc"
+                createdAt: "asc"
             }
         })
 
@@ -139,7 +140,7 @@ class CurhatServices {
             throw new ApiError(errors.INVALID_DETAIL_PROFILE);
         }
 
-        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
+        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.ascription+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
 
         const storeConversation = await this._storeConversation({}, userId);
 
@@ -163,7 +164,7 @@ class CurhatServices {
                 readeble: true
             },
             orderBy: {
-                createdAt: "desc"
+                createdAt: "asc"
             }
         })
 
