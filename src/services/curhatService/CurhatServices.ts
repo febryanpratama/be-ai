@@ -5,6 +5,11 @@ import { errors } from "config/errors";
 import { v4 as uuidv4 } from "uuid";
 
 
+interface promptInterface {
+    role: string;
+    content: string;
+}
+
 
 class CurhatServices {
 
@@ -103,18 +108,34 @@ class CurhatServices {
                 conversationId: body.conversation_id,
                 response: body.prompt,
                 isUser: true,
-                readeble: true
+                readeble: true,
+                roleAi: "user"
             }
         })
 
-        const resp = await IntegrationChatGpt.postMbti(body.prompt);
+        const getListDetailConversation = await this.getListDetailConversation(body.conversation_id);
+
+        const messagePrompt : promptInterface[] = [];
+
+        getListDetailConversation.map(async (item:any) => {
+            messagePrompt.push({
+                role: item.roleAi,
+                content: item.response
+            })
+        });
+
+        const resp = await IntegrationChatGpt.storeChatgpt(messagePrompt);
+
+        console.debug("========================Response from ai")
+        console.debug(resp);
 
         const storeDetailConverstaionAI = await client().detailConversation.create({
             data: {
                 conversationId: body.conversation_id,
                 response: resp.response,
                 isUser: false,
-                readeble: true
+                readeble: true,
+                roleAi: "assistant"
             }
         })
 
@@ -124,7 +145,6 @@ class CurhatServices {
                 readeble: true
             }
         })
-
 
         return listDetailConversation;
     }
@@ -177,7 +197,8 @@ class CurhatServices {
                 conversationId: body.conversation_id,
                 response: body.prompt,
                 isUser: true,
-                readeble: false
+                readeble: false,
+                roleAi: "user"
             }
         })
 
@@ -188,7 +209,8 @@ class CurhatServices {
                 conversationId: body.conversation_id,
                 response: resp.response,
                 isUser: false,
-                readeble: true
+                readeble: true,
+                roleAi: "assistant"
             }
         })
 
