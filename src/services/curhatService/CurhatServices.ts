@@ -140,7 +140,7 @@ class CurhatServices {
             throw new ApiError(errors.INVALID_DETAIL_PROFILE);
         }
 
-        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.ascription+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
+        const prompt = "Sebagai seorang yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat"
 
         const storeConversation = await this._storeConversation({}, userId);
 
