@@ -69,3 +69,7 @@ export interface DetailPostCurhatRequest{
     conversation_id: number;
     prompt: string;
 }
+
+export interface PostTextSpeechRequest {
+    text: string;
+}
