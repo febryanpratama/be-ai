@@ -47,7 +47,10 @@ class CurhatServices {
             data: {
                 conversationId: setStore.id,
                 response: body.prompt,
-                isUser: true
+                isUser: true,
+                readeble: false,
+                roleAi: "user"
+
             }
         })
 
@@ -58,7 +61,9 @@ class CurhatServices {
             data: {
                 conversationId: setStore.id,
                 response: resp.response,
-                isUser: false
+                isUser: false,
+                readeble: true,
+                roleAi: "assistant"
             }
         })
 
