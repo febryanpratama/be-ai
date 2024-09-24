@@ -32,7 +32,11 @@ export const validateMbtiFields = (fields: any) => {
     validator.string(fields.password)
     validator.string(fields.foto)
     validator.string(fields.prompt)
+    validator.string(fields.bahasa)
+    validator.string(fields.gaya_komunikasi)
+    validator.string(fields.durasi_komunikasi)
 }
+
 
 export const validateStoreMoodFields = (fields: any) => {
     validator.typeEmoticon(fields.emoticon)

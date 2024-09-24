@@ -45,6 +45,9 @@ export interface MbtiRequest {
     password: string,
     foto: string,
     prompt: string;
+    bahasa: string;
+    gaya_komunikasi: string;
+    durasi_komunikasi: string;
 }
 
 export interface MoodRequest {

@@ -73,8 +73,9 @@ model ProfileUser {
   username  String?
   foto      String?
   description String?
-  // old
-  // mood        String?
+  bahasa    String?
+  gayaKomunikasi String?
+  durasiKomunikasi String?
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

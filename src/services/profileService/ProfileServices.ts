@@ -37,7 +37,10 @@ class ProfileServices {
                     nama: body.nama,
                     username: body.username || null,
                     foto: body.foto || null,
-                    description: postData.response
+                    description: postData.response,
+                    bahasa: body.bahasa,
+                    gayaKomunikasi: body.gaya_komunikasi,
+                    durasiKomunikasi: body.durasi_komunikasi
                 }
             })
 
