@@ -19,8 +19,8 @@ enum Role {
 
 model User {
   id           Int            @id @default(autoincrement())
-  username     String?         @unique
-  email        String        @unique
+  username     String?        @unique
+  email        String         @unique
   name         String?
   password     String?
   address      String?
@@ -37,9 +37,17 @@ model User {
   ProfileUser  ProfileUser[]
   moodUser     MoodUser[]
   Conversation Conversation[]
+
   @@map("users")
 }
 
+enum sessionType {
+  physical
+  mental_emotional
+  social
+  spiritual
+  financial
+}
 
 model Session {
   id        Int?      @default(autoincrement())
@@ -54,50 +62,47 @@ model Session {
 }
 
 model Otp {
-  id        Int      @unique @default(autoincrement())
-  code      Int      
+  id        Int       @unique @default(autoincrement())
+  code      Int
   userId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   user      User      @relation(fields: [userId], references: [id])
-
 }
 
-
 model ProfileUser {
-  id        Int      @default(autoincrement()) @id
-  userId    Int
-  nama      String
-  gender    String
-  username  String?
-  foto      String?
-  description String?
-  bahasa    String?
-  gayaKomunikasi String?
+  id               Int     @id @default(autoincrement())
+  userId           Int
+  nama             String
+  gender           String
+  username         String?
+  foto             String?
+  description      String?
+  bahasa           String?
+  gayaKomunikasi   String?
   durasiKomunikasi String?
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@map("profile_users")
 }
 
-
 model MoodUser {
-  id        Int      @default(autoincrement()) @id
-  userId    Int
-  emoticon  emoticonType @default(indifferent) 
-  description      String?
-  date      DateTime?
-  type      typeMood
-  responseAi String? 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-  user      User     @relation(fields: [userId], references: [id])
+  id          Int          @id @default(autoincrement())
+  userId      Int
+  emoticon    emoticonType @default(indifferent)
+  description String?
+  date        DateTime?
+  type        typeMood
+  responseAi  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+  user        User         @relation(fields: [userId], references: [id])
 
   @@map("mood_users")
 }
@@ -112,22 +117,22 @@ enum emoticonType {
 
 enum typeMood {
   career
-  family 
+  family
   love
   friends
 }
 
-
 model Conversation {
-  id       Int      @default(autoincrement()) @id
-  userId   Int
-  uuid     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-  user     User     @relation(fields: [userId], references: [id])
-  isEndConversation Boolean @default(false)
-  DetailConversation  DetailConversation[]
+  id                 Int                  @id @default(autoincrement())
+  userId             Int? // This allows null and undefined
+  uuid               String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  deletedAt          DateTime?
+  user               User?                @relation(fields: [userId], references: [id])
+  isEndConversation  Boolean              @default(false)
+  type               sessionType          @default(physical)
+  DetailConversation DetailConversation[]
 }
 
 enum roleAi {
@@ -136,14 +141,14 @@ enum roleAi {
 }
 
 model DetailConversation {
-  id            Int      @default(autoincrement()) @id
+  id             Int          @id @default(autoincrement())
   conversationId Int
   response       String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
-  roleAi         roleAi @default(assistant)
-  isUser         Boolean @default(false)
-  readeble       Boolean @default(false)
+  roleAi         roleAi       @default(assistant)
+  isUser         Boolean      @default(false)
+  readeble       Boolean      @default(false)
   conversation   Conversation @relation(fields: [conversationId], references: [id])
 }
