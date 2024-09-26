@@ -79,10 +79,26 @@ export interface PostSessionCurhatOpenRequest {
     gender?: string;
 }
 
+export interface PackageRequest {
+    price: string;
+    total_people: string;
+    type: string;
+}
+
+export interface UpdatePackageRequest {
+    package_id: number;
+    price: string;
+    total_people: string;
+    type: string;
+}
+
+export interface DetailPackageRequest {
+    package_id: number;
 
 export interface SessionCurhatRequest {
     jenis_kelamin: string;
     gaya_bicara: string;
     jenis_penyampaian: string;
     tipe?: string;
+
 }

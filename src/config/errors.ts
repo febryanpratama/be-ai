@@ -125,5 +125,10 @@ export const errors = {
     httpCode: 400,
     errorCode: 400028,
     description: "Invalid Detail Profile User. You Must Set Profile First!!"
-  } 
+  },
+  INVALID_TYPE_DurationPackage: {
+    httpCode: 400,
+    errorCode: 400029,
+    description: "Invalid type, type must month or year"
+  },
 }
