@@ -1,4 +1,4 @@
-import {Body, Post, Route, Controller} from "tsoa";
+import {Body, Post, Route, Controller, Hidden} from "tsoa";
 import httpStatus from "http-status";
 import {createResponse, ResponseData} from "config/ResponseData";
 import { PostTextSpeechRequest } from "entity/AuthEntity";
@@ -23,6 +23,7 @@ export class SpeechController extends Controller {
   // }
 
   @Post("text-to-speech")
+  @Hidden()
   public async textToSpeech(@Body() body: PostTextSpeechRequest): Promise<ResponseData<any>> {
     const resp = await speechServices.textToSpeech(body);
 

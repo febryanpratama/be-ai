@@ -155,17 +155,7 @@ class CurhatServices {
     public storeSessionCurhat = async (respBody: any, userId: number): Promise<any> => {
 
         try {
-            // const checkUser = await client().user.findFirst({
-            //     where: {
-            //         id: userId
-            //     }
-            // })
-            //
-            // if(!checkUser){
-            //     throw new ApiError(errors.USER_NOT_FOUND);
-            // }
-
-            const prompt = `Sebagai psikolog berpengalaman dengan gender ${respBody.jenis_kelamin}, silakan sapa SAYA dengan gaya komunikasi ${respBody.gaya_komunikasi} dan tingkat panjang pendek komunikasi ${respBody.gaya_bicara}, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila $name memberi respon yang mengandung unsur Negative thought patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
+            const prompt = `Sebagai psikolog berpengalaman dengan gender ${respBody.jenis_kelamin}, silakan sapa SAYA dengan gaya komunikasi ${respBody.gaya_bicara} dan tingkat panjang pendek komunikasi ${respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila $name memberi respon yang mengandung unsur Negative thought patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
 
 
             const storeConversation = await this._storeConversation({}, userId);
@@ -189,6 +179,8 @@ class CurhatServices {
             return getDetailCurhat;
         }catch(e:any){
             console.debug(e);
+
+            throw new ApiError(errors.UNAUTHENTICATED)
         }
 
 

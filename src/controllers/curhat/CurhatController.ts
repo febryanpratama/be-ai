@@ -4,9 +4,8 @@ import { Context } from "middleware/context";
 import {CurhatRequest, DetailCurhatRequest, DetailPostCurhatRequest, SessionCurhatRequest} from "entity/AuthEntity";
 import {
     validateDetailCurhatFields,
-    validatePostDetailCurhatFields,
-    validateSessionCurhatFields,
-    validateStoreCurhatFields
+    validatePostDetailCurhatFields, validateSessionCurhatFields, validateStoreCurhatFields
+
 } from "root/src/validator/AuthValidator";
 import { createResponse } from "config/ResponseData";
 
@@ -66,10 +65,9 @@ export class CurhatController extends Controller {
 
     @Post("create-session-curhat")
     @Security("bearerAuth", [ScopeRole.USER])
-    public async createSessionCurhat(@Body() body: SessionCurhatRequest,@Request() request: Context): Promise<any>{
+    public async createSessionCurhat(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
+        validateSessionCurhatFields(body)
         const id = request.user.id;
-        console.debug(body);
-
         const resp = await CurhatServices.storeSessionCurhat(body, Number(id));
 
         this.setStatus(httpStatus.OK)
