@@ -73,3 +73,8 @@ export interface DetailPostCurhatRequest{
 export interface PostTextSpeechRequest {
     text: string;
 }
+
+export interface PostSessionCurhatOpenRequest {
+    nama?: string;
+    gender?: string;
+}

@@ -57,3 +57,8 @@ export const validatePostDetailCurhatFields = (fields: any) => {
     validator.number(fields.conversation_id)
     validator.string(fields.prompt)
 }
+
+export const validatePostSessionCurhatFields = (fields: any) => {
+    validator.string(fields.gender)
+    validator.string(fields.nama)
+}

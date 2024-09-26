@@ -3,6 +3,7 @@ import IntegrationChatGpt from "root/src/integration/IntegrationChatGpt"
 import { ApiError } from "utils/apiError";
 import { errors } from "config/errors";
 import { v4 as uuidv4 } from "uuid";
+import integrationChatGpt from "root/src/integration/IntegrationChatGpt";
 
 
 interface promptInterface {
@@ -193,7 +194,7 @@ class CurhatServices {
         return listDetailConversation
     }
 
-    public storeDetailCurhatSession = async (body: any, userId: number): Promise<any> => {
+    public storeDetailCurhatSession = async (body: any, userId?: number): Promise<any> => {
         const storeDetailConverstaion = await client().detailConversation.create({
             data: {
                 conversationId: body.conversation_id,
@@ -234,6 +235,29 @@ class CurhatServices {
         })
 
         return listDetailConversation
+    }
+
+    public postSessionOpenApi = async (gender?: string, nama?: string): Promise<any> => {
+        const uuid = uuidv4();
+
+        const CreateSessionOpen = await client().conversation.create({
+            data: {
+                uuid: uuid,
+                userId: null, // Set userId to null
+            }
+        });
+
+        const prompt = "Set Prompt disini sesuai dengan tipe chat sosial, mental or etc"
+
+        const reqBody = {
+            prompt
+        }
+
+        const fetchChatGpt = await integrationChatGpt.postMbti(reqBody.prompt)
+
+        const storeDetailConversation = await this.storeDetailCurhatSession(reqBody)
+
+        return storeDetailConversation; // Return the created session if needed
     }
     
 }
