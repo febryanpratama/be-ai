@@ -2,7 +2,7 @@ import { MbtiRequest } from "entity/AuthEntity";
 import {ScopeRole} from "root/src/enum/ScopeRoleEnum";
 
 import {Context} from "middleware/context";
-import { Body, Controller, Post, Request, Route, Security } from "tsoa";
+import {Body, Controller, Hidden, Post, Request, Route, Security} from "tsoa";
 import {createResponse, ResponseData} from "config/ResponseData";
 import httpStatus from "http-status";
 import { validateCheckFields, validateMbtiFields } from "root/src/validator/AuthValidator";
@@ -15,7 +15,19 @@ import ProfileServices from "services/profileService/ProfileServices";
 export class ProfileController extends Controller {
     @Post("/mbti")
     @Security("bearerAuth", [ScopeRole.USER])
+    @Hidden()
     public async getProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
+        validateMbtiFields(body);
+        const id = request.user.id;
+        const resp = await ProfileServices.getMbti(body, Number(id));
+        this.setStatus(httpStatus.OK);
+        return createResponse(resp);
+    }
+    
+    @Post("/set-profile")
+    @Security("bearerAuth", [ScopeRole.USER])
+    @Hidden()
+    public async setProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
         validateMbtiFields(body);
         const id = request.user.id;
         const resp = await ProfileServices.getMbti(body, Number(id));

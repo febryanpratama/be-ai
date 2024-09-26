@@ -124,12 +124,12 @@ enum typeMood {
 
 model Conversation {
   id                 Int                  @id @default(autoincrement())
-  userId             Int? // This allows null and undefined
+  userId             Int // This allows null and undefined
   uuid               String
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   deletedAt          DateTime?
-  user               User?                @relation(fields: [userId], references: [id])
+  user               User                 @relation(fields: [userId], references: [id])
   isEndConversation  Boolean              @default(false)
   type               sessionType          @default(physical)
   DetailConversation DetailConversation[]

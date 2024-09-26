@@ -94,4 +94,11 @@ export interface UpdatePackageRequest {
 
 export interface DetailPackageRequest {
     package_id: number;
+
+export interface SessionCurhatRequest {
+    jenis_kelamin: string;
+    gaya_bicara: string;
+    jenis_penyampaian: string;
+    tipe?: string;
+
 }
