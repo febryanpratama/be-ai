@@ -78,3 +78,11 @@ export interface PostSessionCurhatOpenRequest {
     nama?: string;
     gender?: string;
 }
+
+
+export interface SessionCurhatRequest {
+    jenis_kelamin: string;
+    gaya_bicara: string;
+    jenis_penyampaian: string;
+    tipe?: string;
+}

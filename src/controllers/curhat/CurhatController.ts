@@ -1,8 +1,13 @@
-import { Body, Controller, Get, Post, Request, Route, Security } from "tsoa";
+import { Body, Controller, Get, Hidden, Post, Request, Route, Security } from "tsoa";
 import { ScopeRole } from "root/src/enum/ScopeRoleEnum";
 import { Context } from "middleware/context";
-import { CurhatRequest, DetailCurhatRequest, DetailPostCurhatRequest } from "entity/AuthEntity";
-import { validateDetailCurhatFields, validatePostDetailCurhatFields, validateStoreCurhatFields } from "root/src/validator/AuthValidator";
+import {CurhatRequest, DetailCurhatRequest, DetailPostCurhatRequest, SessionCurhatRequest} from "entity/AuthEntity";
+import {
+    validateDetailCurhatFields,
+    validatePostDetailCurhatFields,
+    validateSessionCurhatFields,
+    validateStoreCurhatFields
+} from "root/src/validator/AuthValidator";
 import { createResponse } from "config/ResponseData";
 
 import httpStatus from "http-status";
@@ -59,14 +64,16 @@ export class CurhatController extends Controller {
         return createResponse(resp);
     }
 
-    @Get("create-session-chat")
+    @Post("create-session-curhat")
     @Security("bearerAuth", [ScopeRole.USER])
-    public async createSessionCurhat(@Request() request: Context): Promise<any> {
+    public async createSessionCurhat(@Body() body: SessionCurhatRequest,@Request() request: Context): Promise<any>{
         const id = request.user.id;
-        const resp = await CurhatServices.storeSessionCurhat(Number(id));
+        console.debug(body);
 
-        this.setStatus(httpStatus.OK);
-        return createResponse(resp);
+        const resp = await CurhatServices.storeSessionCurhat(body, Number(id));
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp)
     }
 
 }
