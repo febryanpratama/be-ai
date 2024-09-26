@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   web:
-    image: be-komik
+    image: be-ai
     volumes:
-      - /root/komik/.env:/home/node/app/.env # Path yang diperbarui sesuai direktori kerja dalam Dockerfile
+      - /root/be-ai/.env:/home/node/app/.env # Path yang diperbarui sesuai direktori kerja dalam Dockerfile
     ports:
       - '8083:8083' # Sesuaikan port sesuai kebutuhan aplikasi
