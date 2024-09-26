@@ -14,6 +14,8 @@ COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/node_modules ./node_modules
 COPY package*.json ./
 
-
+# Expose the port your app will use
 EXPOSE 8083
+
+# Ensure your application reads the .env file at runtime
 CMD ["node", "dist/src/index.js"]
