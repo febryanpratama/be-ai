@@ -17,6 +17,12 @@ enum TypeEmoticon {
     sad = "sad",
     angry = "angry",
 }
+
+enum TypeDurationPackage {
+    month = "month", 
+    year = "year", 
+}
+
 const email = (value: string) => {
     if (!isEmail(value)) {
         throw new ApiError(errors.INVALID_EMAIL);
@@ -37,6 +43,12 @@ const typeMood = (value: string) => {
 const typeEmoticon = (value: string) => {
     if(!Object.values(TypeEmoticon).includes(value as TypeEmoticon)) {
         throw new ApiError(errors.INVALID_TYPE_EMOTICON);
+    }
+}
+
+const typeDurationPackage = (value: string) => {
+    if(!Object.values(TypeDurationPackage).includes(value as TypeDurationPackage)) {
+        throw new ApiError(errors.INVALID_TYPE_DurationPackage);
     }
 }
 
@@ -87,5 +99,6 @@ export const validator = {
     number,
     string,
     typeMood,
-    typeEmoticon
+    typeEmoticon,
+    typeDurationPackage,
 }

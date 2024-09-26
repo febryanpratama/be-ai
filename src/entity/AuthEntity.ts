@@ -78,3 +78,20 @@ export interface PostSessionCurhatOpenRequest {
     nama?: string;
     gender?: string;
 }
+
+export interface PackageRequest {
+    price: string;
+    total_people: string;
+    type: string;
+}
+
+export interface UpdatePackageRequest {
+    package_id: number;
+    price: string;
+    total_people: string;
+    type: string;
+}
+
+export interface DetailPackageRequest {
+    package_id: number;
+}

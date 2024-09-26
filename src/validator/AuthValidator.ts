@@ -62,3 +62,13 @@ export const validatePostSessionCurhatFields = (fields: any) => {
     validator.string(fields.gender)
     validator.string(fields.nama)
 }
+
+export const validateStorePackageFields = (fields: any) => {
+    validator.string(fields.price)
+    validator.string(fields.total_people)
+    validator.typeDurationPackage(fields.type)
+}
+
+export const validateDetailPackageFields = (fields: any) => {
+    validator.number(fields.anggota_id)
+}
