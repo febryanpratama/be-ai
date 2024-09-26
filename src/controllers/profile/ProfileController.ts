@@ -22,4 +22,14 @@ export class ProfileController extends Controller {
         this.setStatus(httpStatus.OK);
         return createResponse(resp);
     }
+    
+    @Post("/set-profile")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async setProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
+        validateMbtiFields(body);
+        const id = request.user.id;
+        const resp = await ProfileServices.getMbti(body, Number(id));
+        this.setStatus(httpStatus.OK);
+        return createResponse(resp);
+    }
 }
