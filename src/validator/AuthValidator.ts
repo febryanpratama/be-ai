@@ -71,6 +71,7 @@ export const validateStorePackageFields = (fields: any) => {
 
 export const validateDetailPackageFields = (fields: any) => {
     validator.number(fields.anggota_id)
+}
 
 export const validateSessionCurhatFields = (fields: any) => {
     validator.string(fields.jenis_kelamin)
