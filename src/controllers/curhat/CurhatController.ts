@@ -62,6 +62,16 @@ export class CurhatController extends Controller {
         this.setStatus(httpStatus.OK)
         return createResponse(resp);
     }
+    @Post("store-detail-chatgpt")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async storeDetailCurhatChatgpt(@Body() body: DetailPostCurhatRequest, @Request() request: Context): Promise<any> {
+        validatePostDetailCurhatFields(body);
+        const id = request.user.id;
+        const resp = await CurhatServices.storeDetailCurhatChatGpt(body, Number(id));
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp);
+    }
 
     @Get("create-session-chat")
     @Security("bearerAuth", [ScopeRole.USER])
