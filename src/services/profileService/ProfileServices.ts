@@ -1,5 +1,4 @@
 import { errors } from "config/errors";
-import { Hash } from "crypto";
 import { client } from "root/src/db/db";
 import IntegrationChatGpt from "root/src/integration/IntegrationChatGpt";
 import { ApiError } from "utils/apiError";
@@ -8,9 +7,13 @@ import HastUtils from "utils/HastUtils";
 
 class ProfileServices {
     public getMbti = async (body: any, userId: number): Promise<any> => {
-        const postData = await IntegrationChatGpt.postMbti(body.prompt);
+        try {
+            const postData = await IntegrationChatGpt.postMbti(body.prompt);
+
+            console.debug(postData);
 
         if(!postData) {
+            console.debug("ERRORRRRR");
             throw new ApiError(errors.INTERNAL_SERVER_ERROR);
         }
 
@@ -59,6 +62,11 @@ class ProfileServices {
 
             return storeMbti;
         }
+            
+        } catch (error) {
+            console.debug(error);
+        }
+        
 
     }
 }

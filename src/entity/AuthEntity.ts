@@ -43,7 +43,7 @@ export interface MbtiRequest {
     gender: string,
     username: string,
     password: string,
-    foto: string,
+    foto?: string,
     prompt: string;
     bahasa: string;
     gaya_komunikasi: string;

@@ -30,7 +30,6 @@ export const validateMbtiFields = (fields: any) => {
     validator.string(fields.gender)
     validator.string(fields.username)
     validator.string(fields.password)
-    validator.string(fields.foto)
     validator.string(fields.prompt)
     validator.string(fields.bahasa)
     validator.string(fields.gaya_komunikasi)
