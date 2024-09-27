@@ -15,7 +15,6 @@ import ProfileServices from "services/profileService/ProfileServices";
 export class ProfileController extends Controller {
     @Post("/mbti")
     @Security("bearerAuth", [ScopeRole.USER])
-    @Hidden()
     public async getProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
         validateMbtiFields(body);
         const id = request.user.id;
@@ -26,7 +25,6 @@ export class ProfileController extends Controller {
     
     @Post("/set-profile")
     @Security("bearerAuth", [ScopeRole.USER])
-    @Hidden()
     public async setProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
         validateMbtiFields(body);
         const id = request.user.id;
