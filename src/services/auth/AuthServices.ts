@@ -268,6 +268,28 @@ class AuthServices {
       }
     });
 
+    if(checkProfile){
+      const checkConversation = await client().conversation.findFirst({
+        where: {
+          userId: user.id
+        }
+      })
+
+      if(checkConversation){
+        const deleteDetail = await client().detailConversation.deleteMany({
+          where: {
+            conversationId: checkConversation.id
+          }
+        })
+
+        const deleteConversation = await client().conversation.delete({
+          where: {
+            id: checkConversation.id
+          }
+        })
+      }
+    }
+
 
     if(!user.password){
       const checkOtp = await client().otp.findFirst({
