@@ -1,4 +1,4 @@
-import {Body, Post, Route, Controller} from "tsoa";
+import {Body, Post, Route, Controller, Hidden} from "tsoa";
 import {CheckRequest, LoginRequest, LoginResponse, LoginV2Request, PasswordV2Request, RegisterRequest} from "root/src/entity/AuthEntity";
 import {validateCheckFields, validateLoginFields, validateLoginV2Fields, validatePasswordV2Fields, validateRegisterFields} from "root/src/validator/AuthValidator";
 import AuthServices from "services/auth/AuthServices";
@@ -7,23 +7,9 @@ import {createResponse, ResponseData} from "config/ResponseData";
 
 @Route("api/auth")
 export class AuthController extends Controller {
-  // @Post("login")
-  // public async login(@Body() body: LoginRequest): Promise<ResponseData<LoginResponse>> {
-  //   validateLoginFields(body);
-  //   const resp = await AuthServices.login(body);
-  //   this.setStatus(httpStatus.OK);
-  //   return createResponse(resp);
-  // }
-
-  // @Post("register")
-  // public async register(@Body() body: RegisterRequest): Promise<ResponseData<LoginResponse>> {
-  //   validateRegisterFields(body)
-  //   const resp = await AuthServices.register(body);
-  //   this.setStatus(httpStatus.OK);
-  //   return createResponse(resp);
-  // }
 
   @Post("/check")
+  @Hidden()
   public async check(@Body() body: CheckRequest): Promise<ResponseData<any>> {
     validateCheckFields(body);
     const resp = await AuthServices.checkValue(body.key, body.value);
