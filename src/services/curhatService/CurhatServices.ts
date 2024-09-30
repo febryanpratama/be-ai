@@ -149,7 +149,7 @@ class CurhatServices {
             }
         })
 
-        return listDetailConversation;
+        return storeDetailConverstaionAI;
     }
 
     public storeDetailCurhatChatGpt = async (body: any, userId: number): Promise<any> => {
