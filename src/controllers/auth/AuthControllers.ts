@@ -8,16 +8,6 @@ import {createResponse, ResponseData} from "config/ResponseData";
 @Route("api/auth")
 export class AuthController extends Controller {
 
-  @Post("/check")
-  @Hidden()
-  public async check(@Body() body: CheckRequest): Promise<ResponseData<any>> {
-    validateCheckFields(body);
-    const resp = await AuthServices.checkValue(body.key, body.value);
-
-    this.setStatus(httpStatus.OK);
-    return createResponse(resp);
-  }
-
   @Post("/login-v2")
   public async loginV2(@Body() body: LoginV2Request): Promise<ResponseData<LoginResponse>> {
     validateLoginV2Fields(body);
