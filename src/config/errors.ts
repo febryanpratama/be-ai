@@ -61,6 +61,11 @@ export const errors = {
     errorCode: 404001,
     description: "User not found",
   },
+  DATA_NOT_FOUND: {
+    httpCode: 404,
+    errorCode: 404002,
+    description: "Data Not Found",
+  },
   USER_ALREADY_EXISTS: {
     httpCode: 400,
     errorCode: 400005,
@@ -131,4 +136,9 @@ export const errors = {
     errorCode: 400029,
     description: "Invalid type, type must month or year"
   },
+  INVALID_BOOLEAN: {
+    httpCode: 400,
+    errorCode: 400039,
+    description: "Invalid value, must true or false value"
+  }
 }

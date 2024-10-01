@@ -75,6 +75,7 @@ export class CurhatController extends Controller {
 
     @Get("create-session-chat")
     @Security("bearerAuth", [ScopeRole.USER])
+    @Hidden()
     public async createGetSessionCurhat(@Request() request: Context): Promise<any> {
         const id = request.user.id;
         const resp = await CurhatServices.storeGetSessionCurhat(Number(id));
