@@ -89,6 +89,14 @@ const string = (value: string) => {
     }
 }
 
+const boolean = (value: any): boolean => {
+    if (typeof value !== 'boolean') {
+        throw new ApiError(errors.INVALID_BOOLEAN);
+    }
+
+    return value;
+}
+
 export const validator = {
     email,
     password,
@@ -101,4 +109,5 @@ export const validator = {
     typeMood,
     typeEmoticon,
     typeDurationPackage,
+    boolean
 }

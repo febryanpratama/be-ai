@@ -76,5 +76,4 @@ export const validateSessionCurhatFields = (fields: any) => {
     validator.string(fields.jenis_kelamin)
     validator.string(fields.gaya_bicara)
     validator.string(fields.jenis_penyampaian)
-
 }

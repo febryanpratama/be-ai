@@ -100,5 +100,5 @@ export interface SessionCurhatRequest {
     gaya_bicara: string;
     jenis_penyampaian: string;
     tipe?: string;
-
 }
+
