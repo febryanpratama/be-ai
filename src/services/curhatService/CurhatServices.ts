@@ -81,7 +81,7 @@ class CurhatServices {
             data: {
                 uuid,
                 userId,
-                type: body.tipe
+                type: body.tipe || "bot"
             }
         })
 
