@@ -95,4 +95,15 @@ export class CurhatController extends Controller {
         return createResponse(resp)
     }
 
+    @Post("create-session-curhat-v2")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async createSessionCurhatV2(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
+        validateSessionCurhatFields(body)
+        const id = request.user.id;
+        const resp = await CurhatServices.storeSessionCurhatV2(body, Number(id))
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp);
+    }
+
 }
