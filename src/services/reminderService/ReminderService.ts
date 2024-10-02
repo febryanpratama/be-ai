@@ -27,6 +27,8 @@ class ReminderService {
                 Remind: body.reminder || false
             }
         })
+
+        return storeReminder;
     }
 
     public detailReminder = async(reminderId: number, userId: number): Promise<any> => {
@@ -42,6 +44,52 @@ class ReminderService {
         }
 
         return detailReminder;
+    }
+
+    public updateReminder = async(body:any, userId:number): Promise<any> => {
+        const parsedDate = new Date(body.tanggal);
+
+        const checkReminder = await client().reminder.findFirst({
+            where:{
+                id: body.reminder_id,
+                userId
+            }
+        })
+
+        if(!checkReminder){
+            throw new ApiError(errors.DATA_NOT_FOUND)
+        }
+
+        const updateReminder = await client().reminder.update({
+            where:{
+                id: body.reminder_id,
+                userId
+            },data : {
+                nama_pengingat: body.nama_pengingat,
+                kategori: body.kategori,
+                tanggal: parsedDate,
+                WaktuStart: body.waktu_start,
+                WaktuEnd: body.waktu_end,
+                Remind: body.reminder || false
+            }
+        })
+
+        return updateReminder;
+    }
+
+    public deleteReminder = async (reminderId: number, userId: number): Promise<any> => {
+        const deleteReminder = await client().reminder.delete({
+            where: {
+                id:reminderId,
+                userId
+            }
+        })
+
+        if(!deleteReminder){
+            throw new ApiError(errors.DATA_NOT_FOUND)
+        }
+
+        return deleteReminder;
     }
 }
 
