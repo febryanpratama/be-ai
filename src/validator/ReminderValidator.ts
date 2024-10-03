@@ -8,4 +8,5 @@ export const validateReminder = (fields: ReminderRequest) => {
     validator.string(fields.waktu_start)
     validator.string(fields.waktu_end)
     validator.boolean(fields.repeat)
+    validator.number(fields.remind)
 };

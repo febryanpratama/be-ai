@@ -5,6 +5,7 @@ export interface ReminderRequest {
     waktu_start: string;
     waktu_end: string;
     repeat: boolean;
+    remind: number;
 }
 export interface ReminderUpdateRequest {
     reminder_id: number;
@@ -14,4 +15,5 @@ export interface ReminderUpdateRequest {
     waktu_start: string;
     waktu_end: string;
     repeat: boolean;
+    remind: number;
 }

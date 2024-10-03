@@ -24,7 +24,8 @@ class ReminderService {
                 tanggal: parsedDate,
                 WaktuStart: body.waktu_start,
                 WaktuEnd: body.waktu_end,
-                Remind: body.reminder || false
+                Remind: body.repeat || false,
+                countdown: body.remind
             }
         })
 
@@ -70,7 +71,8 @@ class ReminderService {
                 tanggal: parsedDate,
                 WaktuStart: body.waktu_start,
                 WaktuEnd: body.waktu_end,
-                Remind: body.reminder || false
+                Remind: body.repeat || false,
+                countdown: body.remind
             }
         })
 
