@@ -7,6 +7,9 @@ class ReminderService {
         const dataReminder = await client().reminder.findMany({
             where : {
                 userId
+            },
+            include : {
+                category: true
             }
         })
 
@@ -20,7 +23,7 @@ class ReminderService {
             data: {
                 userId,
                 nama_pengingat: body.nama_pengingat,
-                kategori: body.kategori,
+                categoryId: body.categoryId,
                 tanggal: parsedDate,
                 WaktuStart: body.waktu_start,
                 WaktuEnd: body.waktu_end,
@@ -37,6 +40,9 @@ class ReminderService {
             where: {
                 id: reminderId,
                 userId
+            },
+            include: {
+                category: true,
             }
         })
 
@@ -67,7 +73,7 @@ class ReminderService {
                 userId
             },data : {
                 nama_pengingat: body.nama_pengingat,
-                kategori: body.kategori,
+                categoryId: body.categoryId,
                 tanggal: parsedDate,
                 WaktuStart: body.waktu_start,
                 WaktuEnd: body.waktu_end,
