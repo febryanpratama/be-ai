@@ -8,7 +8,7 @@ import {CategoryDetailRequest, CategoryDetailUpdateRequest} from "root/src/entit
 import {validateCategoryDetail} from "root/src/validator/CategoryValidator";
 
 @Route("api/category/{categoryId}/detail")
-@Tags('Category Detail')
+@Tags("Category Detail")
 export class CategoryDetailController extends Controller {
     @Get("/")
     public async getCategoryDetail(categoryId: number): Promise<any> {

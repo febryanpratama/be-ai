@@ -8,7 +8,7 @@ import {CategoryRequest, CategoryUpdateRequest} from "root/src/entity/CategoryEn
 import {validateCategory} from "root/src/validator/CategoryValidator";
 
 @Route("api/category")
-@Tags('Category')
+@Tags("Category")
 export class CategoryController extends Controller {
     @Get("/")
     public async getCategory(): Promise<any> {

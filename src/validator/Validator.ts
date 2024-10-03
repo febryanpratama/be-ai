@@ -90,7 +90,7 @@ const string = (value: string) => {
 }
 
 const boolean = (value: any): boolean => {
-    if (typeof value !== 'boolean') {
+    if (typeof value !== "boolean") {
         throw new ApiError(errors.INVALID_BOOLEAN);
     }
 
