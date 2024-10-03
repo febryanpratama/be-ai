@@ -133,7 +133,7 @@ model Conversation {
   deletedAt          DateTime?
   user               User                 @relation(fields: [userId], references: [id])
   isEndConversation  Boolean              @default(false)
-  type               sessionType          @default(bot)
+  type               sessionType          @default(physical)
   DetailConversation DetailConversation[]
 }
 
@@ -174,7 +174,7 @@ model Reminder {
   id Int @id @default(autoincrement())
   userId Int
   nama_pengingat String
-  kategori String
+  categoryId Int
   tanggal DateTime
   WaktuStart String
   WaktuEnd String
@@ -184,4 +184,27 @@ model Reminder {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   user        User         @relation(fields: [userId], references: [id])
+  category        Category @relation(fields: [categoryId], references: [id])
+}
+
+model CategoryDetail {
+  id              Int          @id @default(autoincrement())
+  categoryId      Int
+  description     String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  deletedAt       DateTime?
+  category        Category @relation(fields: [categoryId], references: [id])
+
+}
+
+model Category {
+  id             Int          @id @default(autoincrement())
+  name           String
+  imgUrl         String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  categoryDetail CategoryDetail[]
+  reminder Reminder[]
 }
