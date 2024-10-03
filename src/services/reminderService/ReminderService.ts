@@ -9,7 +9,11 @@ class ReminderService {
                 userId
             },
             include : {
-                category: true
+                category: {
+                    include: {
+                        categoryDetail : true
+                    }
+                }
             }
         })
 
