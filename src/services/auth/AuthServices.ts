@@ -7,121 +7,6 @@ import {ApiError} from "utils/apiError";
 import { token } from "morgan";
 
 class AuthServices {
-  public login = async (body: LoginRequest): Promise<LoginResponse> => {
-    const user = await client().user.findFirst({
-      where: {
-        username: body.username
-      }
-    });
-
-    const password = await HastUtils.comparePassword(body.password, user?.password ?? "");
-
-    if (!password) {
-      throw new ApiError(errors.USER_NOT_FOUND);
-    }
-
-    if (!user) {
-      throw new ApiError(errors.USER_NOT_FOUND);
-    }
-
-    const token = generateToken(user);
-
-    try {
-      await client().session.create({
-        data: {
-          token: token.token,
-          userId: user.id,
-        }
-      });
-    } catch (e) {
-      throw new ApiError(errors.TOKEN_REQUIRED);
-    }
-
-    // return token.token;
-    return {
-      token: token.token,
-      user: {
-        active: user.active,
-        name: user.name ?? "",
-        address: user.address ?? "",
-        email: user.email ?? "",
-        avatar: user.avatar ?? "",
-        phone: user.phone ?? "",
-        username: user.username ?? "",
-      }
-    }
-  }
-  public register = async (body: RegisterRequest): Promise<LoginResponse> => {
-    try {
-      const password = await HastUtils.hashPassword(body.password)
-      const idUser = await client().user.create({
-        data: {
-          username: body.username,
-          email: body.email,
-          password: password,
-          role: "user"
-        }
-      });
-
-      const user = await client().user.findUnique({
-        where: {
-          id: idUser.id
-        }
-      });
-
-      if (!user) {
-        throw new ApiError(errors.USER_NOT_FOUND);
-      }
-
-      const token = generateToken(user);
-
-      try {
-        await client().session.create({
-          data: {
-            token: token.token,
-            userId: idUser.id,
-          }
-        });
-      } catch (e) {
-        throw new ApiError(errors.TOKEN_REQUIRED);
-      }
-
-      return {
-        token: token.token,
-        user: {
-          active: user.active,
-          name: user.name ?? "",
-          address: user.address ?? "",
-          email: user.email ?? "",
-          avatar: user.avatar ?? "",
-          phone: user.phone ?? "",
-          username: user.username ?? "",
-        }
-      }
-
-    } catch (e) {
-      throw new ApiError(errors.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  public checkValue = async (key: string, value: string): Promise<any> => {
-    const user = await client().user.findFirst({
-      where: {
-        [key]: value
-      }
-    });
-
-    if (user) {
-      return {
-        status: true
-      }
-    }
-
-    return {
-      status: false
-    };
-  }
-
 
   // V2
   public loginV2 = async (body: LoginV2Request): Promise<any> => {
@@ -267,6 +152,28 @@ class AuthServices {
         userId: user.id
       }
     });
+
+    if(user){
+      const checkConversation = await client().conversation.findFirst({
+        where: {
+          userId: user.id
+        }
+      })
+
+      if(checkConversation){
+        const deleteDetail = await client().detailConversation.deleteMany({
+          where: {
+            conversationId: checkConversation.id
+          }
+        })
+
+        const deleteConversation = await client().conversation.delete({
+          where: {
+            id: checkConversation.id
+          }
+        })
+      }
+    }
 
 
     if(!user.password){

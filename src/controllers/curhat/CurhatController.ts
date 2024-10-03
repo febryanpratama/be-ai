@@ -62,11 +62,32 @@ export class CurhatController extends Controller {
         this.setStatus(httpStatus.OK)
         return createResponse(resp);
     }
+    @Post("store-detail-chatgpt")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async storeDetailCurhatChatgpt(@Body() body: DetailPostCurhatRequest, @Request() request: Context): Promise<any> {
+        validatePostDetailCurhatFields(body);
+        const id = request.user.id;
+        const resp = await CurhatServices.storeDetailCurhatChatGpt(body, Number(id));
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp);
+    }
+
+    @Get("create-session-chat")
+    @Security("bearerAuth", [ScopeRole.USER])
+    @Hidden()
+    public async createGetSessionCurhat(@Request() request: Context): Promise<any> {
+        const id = request.user.id;
+        const resp = await CurhatServices.storeGetSessionCurhat(Number(id));
+
+        this.setStatus(httpStatus.OK);
+        return createResponse(resp);
+    }
 
     @Post("create-session-curhat")
     @Security("bearerAuth", [ScopeRole.USER])
     public async createSessionCurhat(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
-        validateSessionCurhatFields(body)
+        // validateSessionCurhatFields(body)
         const id = request.user.id;
         const resp = await CurhatServices.storeSessionCurhat(body, Number(id));
 
@@ -74,4 +95,17 @@ export class CurhatController extends Controller {
         return createResponse(resp)
     }
 
+    @Post("create-session-curhat-v2")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async createSessionCurhatV2(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
+        validateSessionCurhatFields(body)
+        const id = request.user.id;
+        const resp = await CurhatServices.storeSessionCurhatV2(body, Number(id))
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp);
+    }
+
+    // @Post("create-sessuin-curhat-tipe")
+    // @Security
 }

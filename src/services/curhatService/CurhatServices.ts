@@ -80,7 +80,8 @@ class CurhatServices {
         const storeConversation = await client().conversation.create({
             data: {
                 uuid,
-                userId
+                userId,
+                type: body.tipe == "" ? "bot" : body.tipe
             }
         })
 
@@ -149,19 +150,75 @@ class CurhatServices {
             }
         })
 
-        return listDetailConversation;
+        return storeDetailConverstaionAI;
+    }
+
+    public storeDetailCurhatChatGpt = async (body: any, userId: number): Promise<any> => {
+        const storeDetailConverstaion = await client().detailConversation.create({
+            data: {
+                conversationId: body.conversation_id,
+                response: body.prompt,
+                isUser: true,
+                readeble: true,
+                roleAi: "user"
+            }
+        })
+
+        const getListDetailConversation = await this.getListAllDetailConversation(body.conversation_id);
+
+        const messagePrompt : promptInterface[] = [];
+
+        getListDetailConversation.map(async (item:any) => {
+            messagePrompt.push({
+                role: item.roleAi,
+                content: item.response
+            })
+        });
+
+        const resp = await IntegrationChatGpt.storeChatgpt(messagePrompt);
+
+        const storeDetailConverstaionAI = await client().detailConversation.create({
+            data: {
+                conversationId: body.conversation_id,
+                response: resp.response,
+                isUser: false,
+                readeble: true,
+                roleAi: "assistant"
+            }
+        })
+
+        const listDetailConversation = await client().detailConversation.findMany({
+            where: {
+                conversationId: body.conversation_id,
+                readeble: true
+            }
+        })
+
+        return storeDetailConverstaionAI;
     }
 
     public storeSessionCurhat = async (respBody: any, userId: number): Promise<any> => {
 
         try {
-            const prompt = `Sebagai psikolog berpengalaman dengan gender ${respBody.jenis_kelamin}, silakan sapa SAYA dengan gaya komunikasi ${respBody.gaya_bicara} dan tingkat panjang pendek komunikasi ${respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila $name memberi respon yang mengandung unsur Negative thought patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
+            const checkProfile = await client().profileUser.findFirst({
+                where: {
+                    userId
+                }
+            })
 
-
-            const storeConversation = await this._storeConversation({}, userId);
-
-            console.debug("============================")
-            console.debug(storeConversation)
+            if(!checkProfile){
+                const updateProfile = await client().profileUser.create({
+                    data: {
+                        userId,
+                        nama: "Saya",
+                        gender: respBody.jenis_kelamin,
+                        gayaKomunikasi: respBody.gaya_bicara,
+                        durasiKomunikasi: "Sangat Singkat"
+                    }
+                })
+            }
+            const prompt = `Sebagai psikolog berpengalaman menangani gender ${checkProfile ? checkProfile.gender:respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya, silakan sapa pengguna dimulai dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${checkProfile ? checkProfile.gayaKomunikasi:respBody.jenis_kelamin} dan tingkat panjang pendek komunikasi sangat singkat, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila pengguna memberi respon yang mengandung unsur Negative Thought Patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
+            const storeConversation = await this._storeConversation(respBody, userId);
 
             const body = {
                 conversation_id: storeConversation.id,
@@ -172,17 +229,12 @@ class CurhatServices {
 
             const getDetailCurhat = await this.detailCurhat(body, userId)
 
-            console.debug("============================")
-            console.debug(storeDetailConverstaion)
-
-
             return getDetailCurhat;
         }catch(e:any){
             console.debug(e);
 
-            throw new ApiError(errors.UNAUTHENTICATED)
+            throw new ApiError(errors.INTERNAL_SERVER_ERROR)
         }
-
 
     }
 
@@ -265,6 +317,36 @@ class CurhatServices {
         const storeDetailConversation = await this.storeDetailCurhatSession(reqBody)
 
         return storeDetailConversation; // Return the created session if needed
+    }
+
+    public storeGetSessionCurhat = async (userId: number): Promise<any> => {
+        const getDetailUser = await client().profileUser.findFirst({
+            where: {
+                userId
+            }
+        })
+
+        if (!getDetailUser) {
+            throw new ApiError(errors.INVALID_DETAIL_PROFILE);
+        }
+
+        const prompt = "Sebagai psikolog berpengalaman yang memahami tipe kepribadian "+getDetailUser.description+" silakan sapa nama "+getDetailUser.nama+" dengan jenis kelamin "+getDetailUser.gender+" yang mau curhat, serta tolong berikan respon curhat yang positif, wise, dan singkat dalam Bahasa Indonesia tanpa mengandung unsur Negative thought patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar memudahkan "+getDetailUser.nama+" memahami.  Apabila "+getDetailUser.nama+" memberi respon yang mengandung unsur Negative thought patterns tolong ditanggapi dengan baik, tanpa menghakimi, tanpa menilai, dan Anda harus dapat mengalihkan ke respon yang solutif."
+
+        const storeConversation = await this._storeConversation({}, userId);
+
+        const body = {
+            conversation_id: storeConversation.id,
+            prompt : prompt
+        }
+
+        const storeDetailConverstaion = await this.storeDetailCurhatSession(body, userId);
+
+
+        return storeConversation;
+    }
+
+    public storeSessionCurhatV2 = async (body: any, userId: number): Promise<any> => {
+
     }
     
 }

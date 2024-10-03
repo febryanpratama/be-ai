@@ -43,7 +43,7 @@ export interface MbtiRequest {
     gender: string,
     username: string,
     password: string,
-    foto: string,
+    foto?: string,
     prompt: string;
     bahasa: string;
     gaya_komunikasi: string;
@@ -96,9 +96,9 @@ export interface DetailPackageRequest {
     package_id: number;
 }
 export interface SessionCurhatRequest {
-    jenis_kelamin: string;
-    gaya_bicara: string;
-    jenis_penyampaian: string;
+    jenis_kelamin?: string;
+    gaya_bicara?: string;
+    jenis_penyampaian?: string;
     tipe?: string;
-
 }
+

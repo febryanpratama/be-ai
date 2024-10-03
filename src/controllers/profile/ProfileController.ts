@@ -7,30 +7,17 @@ import {createResponse, ResponseData} from "config/ResponseData";
 import httpStatus from "http-status";
 import { validateCheckFields, validateMbtiFields } from "root/src/validator/AuthValidator";
 import ProfileServices from "services/profileService/ProfileServices";
-
-
-
-
 @Route("api/profile")
 export class ProfileController extends Controller {
     @Post("/mbti")
     @Security("bearerAuth", [ScopeRole.USER])
-    @Hidden()
     public async getProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
         validateMbtiFields(body);
         const id = request.user.id;
+        console.debug(body)
+        console.debug(id);
         const resp = await ProfileServices.getMbti(body, Number(id));
-        this.setStatus(httpStatus.OK);
-        return createResponse(resp);
-    }
-    
-    @Post("/set-profile")
-    @Security("bearerAuth", [ScopeRole.USER])
-    @Hidden()
-    public async setProfile(@Body() body: MbtiRequest,@Request() request: Context): Promise<ResponseData<any>> {
-        validateMbtiFields(body);
-        const id = request.user.id;
-        const resp = await ProfileServices.getMbti(body, Number(id));
+        console.debug(resp);
         this.setStatus(httpStatus.OK);
         return createResponse(resp);
     }

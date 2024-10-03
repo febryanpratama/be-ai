@@ -53,5 +53,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/be-ai:${{ github.sha }}
             docker stop be-ai || true
             docker rm be-ai || true
-            docker run -d --name be-ai -p 8083:8083 -v /root/komik/.env:/home/node/app/.env ${{ secrets.DOCKER_USERNAME }}/be-ai:${{ github.sha }}
+            docker run -d --name be-ai -p 8083:8083 -v /root/be-ai/.env:/home/node/app/.env ${{ secrets.DOCKER_USERNAME }}/be-ai:${{ github.sha }}
   
