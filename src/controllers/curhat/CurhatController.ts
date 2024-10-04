@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Hidden, Post, Request, Route, Security } from "tsoa";
+import {Body, Controller, Get, Hidden, Post, Request, Route, Security, Tags} from "tsoa";
 import { ScopeRole } from "root/src/enum/ScopeRoleEnum";
 import { Context } from "middleware/context";
 import {CurhatRequest, DetailCurhatRequest, DetailPostCurhatRequest, SessionCurhatRequest} from "entity/AuthEntity";
@@ -14,6 +14,7 @@ import CurhatServices from "services/curhatService/CurhatServices";
 
 
 @Route("api/curhat")
+@Tags("CHAT AI")
 export class CurhatController extends Controller {
     // @Get("/")
 
@@ -100,6 +101,7 @@ export class CurhatController extends Controller {
 
     @Post("create-session-curhat-v2")
     @Security("bearerAuth", [ScopeRole.USER])
+    @Hidden()
     public async createSessionCurhatV2(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
         validateSessionCurhatFields(body)
         const id = request.user.id;

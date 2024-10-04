@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Route, Request, Security, Post, Put, Delete} from "tsoa";
+import {Body, Controller, Get, Route, Request, Security, Post, Put, Delete, Tags} from "tsoa";
 import {Context} from "middleware/context";
 import {ScopeRole} from "root/src/enum/ScopeRoleEnum";
 import ReminderService from "services/reminderService/ReminderService";
@@ -8,6 +8,7 @@ import {ReminderRequest, ReminderUpdateRequest} from "root/src/entity/ReminderEn
 import {validateReminder} from "root/src/validator/ReminderValidator";
 
 @Route("api/reminder")
+@Tags("Reminder")
 export class ReminderController extends Controller {
     @Get("/")
     @Security("bearerAuth", [ScopeRole.USER])

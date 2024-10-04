@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, Route, Security, Delete } from "tsoa";
+import {Body, Controller, Get, Post, Request, Route, Security, Delete, Tags} from "tsoa";
 import { ScopeRole } from "root/src/enum/ScopeRoleEnum";
 // import { Context } from "middleware/context";
 import { PackageRequest, UpdatePackageRequest, DetailPackageRequest } from "entity/AuthEntity";
@@ -10,6 +10,7 @@ import PackageService from "services/packageService/PackageService";
 
 
 @Route("api/package")
+@Tags("Package")
 export class PackageController extends Controller {
     @Get("/")
     public async getPackage(): Promise<any> {
