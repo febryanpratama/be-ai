@@ -91,7 +91,7 @@ export class CurhatController extends Controller {
     @Post("create-session-curhat")
     @Security("bearerAuth", [ScopeRole.USER])
     public async createSessionCurhat(@Body() body: SessionCurhatRequest, @Request() request: Context): Promise<any>{
-        // validateSessionCurhatFields(body)
+        validateSessionCurhatFields(body)
         const id = request.user.id;
         const resp = await CurhatServices.storeSessionCurhat(body, Number(id));
 

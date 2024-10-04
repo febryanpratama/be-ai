@@ -84,7 +84,7 @@ const number = (value: number) => {
 }
 
 const string = (value: string) => {
-    if(value.length < 1){
+    if(value.length < 0){
         throw new ApiError(errors.INVALID_STRING)
     }
 }

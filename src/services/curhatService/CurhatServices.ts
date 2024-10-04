@@ -217,13 +217,13 @@ class CurhatServices {
     public storeSessionCurhat = async (respBody: any, userId: number): Promise<any> => {
 
         try {
-            const checkProfile = await client().profileUser.findFirst({
+            const profileChatGPT = await client().profileUser.findFirst({
                 where: {
                     userId
                 }
             })
 
-            if(!checkProfile){
+            if(!profileChatGPT){
                 const updateProfile = await client().profileUser.create({
                     data: {
                         userId,
@@ -235,7 +235,8 @@ class CurhatServices {
                 })
             }
 
-            const prompt = `Sebagai psikolog berpengalaman menangani gender ${checkProfile ? checkProfile.gender:respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya, silakan sapa pengguna dimulai dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${checkProfile ? checkProfile.gayaKomunikasi:respBody.jenis_kelamin} dan tingkat panjang pendek komunikasi sangat singkat, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila pengguna memberi respon yang mengandung unsur Negative Thought Patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
+            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? profileChatGPT:respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya, silakan sapa pengguna dimulai dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_komunikasi === "" ? profileChatGPT:respBody.gaya_komunikasi} dan tingkat panjang pendek komunikasi sangat singkat, serta tolong berikan respon curhat yang positif. Arahkan pembicaraan menjadi positif dan solutif jika dalam pembicaraan terdapat unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.  Apabila pengguna memberi respon yang mengandung unsur Negative Thought Patterns tolong ditanggapi dengan baik, dan Anda harus dapat mengalihkan perlahan-lahan ke pembicaraan yang positif dan solutif.`
+
             const storeConversation = await this._storeConversation(respBody, userId);
 
             const body = {
