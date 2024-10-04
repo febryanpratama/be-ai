@@ -21,8 +21,11 @@ export class CurhatController extends Controller {
     @Security("bearerAuth", [ScopeRole.USER])
     public async getCurhat(@Request() request: Context): Promise<any> {
         const id = request.user.id;
+        const type = request.query.type ?? "";
 
-        const resp = await CurhatServices.getCurhat(Number(id));
+        console.debug("================",type)
+
+        const resp = await CurhatServices.getCurhat(Number(id), type.toString());
 
         this.setStatus(httpStatus.OK)
         return createResponse(resp);

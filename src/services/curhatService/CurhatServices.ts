@@ -11,18 +11,35 @@ interface promptInterface {
     content: string;
 }
 
+export enum sessionType {
+    physical = "physical",
+    mental_emotional = "mental_emotional",
+    social = "social",
+    spiritual = "spiritual",
+    financial = "financial",
+    bot = "bot",
+}
+
 
 class CurhatServices {
 
-    public getCurhat = async (userId: number): Promise<any> => {
+    public getCurhat = async (userId: number, type?: string): Promise<any> => {
+        // Ensure type is a valid sessionType or default to 'physical'
+        const validType: sessionType =
+            (type === "" || !Object.values(sessionType).includes(type as sessionType))
+                ? sessionType.bot // Default to 'bot' if type is empty or invalid
+                : (type as sessionType); // Cast to sessionType if valid
+
+        console.debug("=======validType========", validType);
         const dataCurhat = await client().conversation.findMany({
             where: {
-                userId
+                userId,
+                type: validType, // Use validType here
             },
             orderBy: {
                 createdAt: "asc" // Sort by newest date first
             }
-        })
+        });
 
         return dataCurhat;
     }
