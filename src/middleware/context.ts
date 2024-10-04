@@ -5,7 +5,7 @@ import {ScopeRole} from "root/src/enum/ScopeRoleEnum";
 import {client} from "root/src/db/db";
 import {Session} from "@prisma/client";
 import {ApiError} from "utils/apiError";
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest } from "express";
 
 interface Payload extends Pick<JWT, "payload"> {
   id: string;
