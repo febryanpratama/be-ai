@@ -1,10 +1,19 @@
-import {Body, Controller, Get, Hidden, Post, Request, Route, Security, Tags} from "tsoa";
+import {Body, Controller, Get, Hidden, Patch, Post, Request, Route, Security, Tags} from "tsoa";
 import { ScopeRole } from "root/src/enum/ScopeRoleEnum";
 import { Context } from "middleware/context";
-import {CurhatRequest, DetailCurhatRequest, DetailPostCurhatRequest, SessionCurhatRequest} from "entity/AuthEntity";
+import {
+    CurhatRequest,
+    DetailCurhatRequest,
+    DetailPostCurhatRequest,
+    SessionCurhatRequest,
+    setRuleCurhatRequest
+} from "entity/AuthEntity";
 import {
     validateDetailCurhatFields,
-    validatePostDetailCurhatFields, validateSessionCurhatFields, validateStoreCurhatFields
+    validatePostDetailCurhatFields,
+    validateSessionCurhatFields,
+    validateStoreCurhatFields,
+    validateUpdateRuleCurhatFields
 
 } from "root/src/validator/AuthValidator";
 import { createResponse } from "config/ResponseData";
@@ -109,6 +118,18 @@ export class CurhatController extends Controller {
 
         this.setStatus(httpStatus.OK)
         return createResponse(resp);
+    }
+
+
+    @Patch("update-rule")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async updateRule(@Body() body: setRuleCurhatRequest, @Request() request: Context): Promise<any> {
+        validateUpdateRuleCurhatFields(body)
+        const id = request.user.id;
+        const resp = await CurhatServices.updateRuleSession(body, Number(id));
+
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp)
     }
 
     // @Post("create-sessuin-curhat-tipe")

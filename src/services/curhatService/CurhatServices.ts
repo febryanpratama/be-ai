@@ -264,7 +264,8 @@ class CurhatServices {
 
             const body = {
                 conversation_id: storeConversation.id,
-                prompt : respBody.prompt === "" ? prompt : respBody.prompt
+                prompt : respBody.prompt === "" ? prompt : respBody.prompt,
+                roleAi : "system"
             }
 
             const storeDetailConverstaion = await this.storeDetailCurhatSession(body, userId);
@@ -344,7 +345,7 @@ class CurhatServices {
                 response: body.prompt,
                 isUser: true,
                 readeble: false,
-                roleAi: "user"
+                roleAi: body.roleAi || "user"
             }
         })
 
@@ -431,6 +432,51 @@ class CurhatServices {
 
     public storeSessionCurhatV2 = async (body: any, userId: number): Promise<any> => {
 
+    }
+
+    public updateRuleSession = async (respBody: any, userId: number): Promise<any> => {
+        try {
+            let type = "";
+
+            switch (respBody.tipe) {
+                case "physical":
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being fisik pengguna.";
+                    break;
+                case "mental_emotional":
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being emosi pengguna.";
+                    break;
+                case "social":
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being sosial pengguna.";
+                    break;
+                case "spiritual":
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being rohani pengguna.";
+                    break;
+                case "financial":
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being keuangan pengguna.";
+                    break;
+                default:
+                    type = "Arahkan pembicaraan menjadi positif dan solutif berkaitan dengan well-being pengguna dimulai dari well-being fisik pengguna, lalu lanjutkan well-being rohani pengguna, lalu lanjutkan well-being emosi pengguna, lalu lanjutkan well-being sosial pengguna, lalu lanjutkan well-being keuangan pengguna.";
+                    break;
+            }
+
+            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Wanita" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
+
+
+            const getConversationDetail = await client().detailConversation.updateMany({
+                where: {
+                    conversationId: respBody.conversation_id,
+                    roleAi: "system",
+                },
+                data: {
+                    response: prompt
+                }
+            })
+
+            return getConversationDetail;
+        }catch (e) {
+        //     err
+            throw new ApiError(errors.INTERNAL_SERVER_ERROR);
+        }
     }
     
 }

@@ -103,3 +103,11 @@ export interface SessionCurhatRequest {
     prompt?: string;
 }
 
+export interface setRuleCurhatRequest {
+    conversation_id: number;
+    jenis_kelamin?: string;
+    gaya_bicara?: string;
+    jenis_penyampaian?: string;
+    tipe?: string;
+}
+
