@@ -489,7 +489,7 @@ class CurhatServices {
 
             return updateDetail;
         }catch (e:any) {
-        //     err
+        //     err data
             console.debug("Catch ERROR ========================")
             console.debug(e)
             throw new ApiError(errors.INTERNAL_SERVER_ERROR);
