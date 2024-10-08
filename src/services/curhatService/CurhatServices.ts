@@ -258,7 +258,7 @@ class CurhatServices {
                     break;
             }
 
-            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Wanita" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
+            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Perempuan" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
 
             const storeConversation = await this._storeConversation(respBody, userId);
 
@@ -271,6 +271,7 @@ class CurhatServices {
             const storeDetailConverstaion = await this.storeDetailCurhatSession(body, userId);
 
             const getDetailCurhat = await this.detailCurhat(body, userId)
+
 
             return getDetailCurhat;
         }catch(e:any){
@@ -459,7 +460,7 @@ class CurhatServices {
                     break;
             }
 
-            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Wanita" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
+            const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Perempuan" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
 
 
             const updateDetail = await client().detailConversation.updateMany({
@@ -486,6 +487,17 @@ class CurhatServices {
 
             console.debug("================= udpate conversation");
             console.debug(updateConversation);
+
+            const updateProfileChatGpt = await client().profileUser.updateMany({
+                where: {
+                    userId,
+                },
+                data: {
+                    gender: respBody.jenis_kelamin,
+                    gayaKomunikasi: respBody.gaya_bicara,
+                    durasiKomunikasi: respBody.jenis_penyampaian
+                }
+            })
 
             return updateDetail;
         }catch (e:any) {
@@ -522,7 +534,7 @@ class CurhatServices {
 
         const json = {
             conversation_id: conversationId,
-            jenis_kelamin: getProfileChatGpt?.gender || "Wanita",
+            jenis_kelamin: getProfileChatGpt?.gender || "Perempuan",
             gaya_bicara: getProfileChatGpt?.gayaKomunikasi || "Friendly",
             jenis_penyampaian: getProfileChatGpt?.durasiKomunikasi || "Singkat",
             tipe: getDetailRule?.conversation.type
