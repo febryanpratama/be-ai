@@ -472,18 +472,26 @@ class CurhatServices {
                 }
             })
 
+            console.debug("================= udpate detail");
+            console.debug(updateDetail);
+
             const updateConversation = await client().conversation.update({
                 where: {
                     id : respBody.conversation_id
                 },
                 data: {
-                    type: respBody.tipe
+                    type: respBody.tipe || "bot"
                 }
             })
 
+            console.debug("================= udpate conversation");
+            console.debug(updateConversation);
+
             return updateDetail;
-        }catch (e) {
+        }catch (e:any) {
         //     err
+            console.debug("Catch ERROR ========================")
+            console.debug(e)
             throw new ApiError(errors.INTERNAL_SERVER_ERROR);
         }
     }
