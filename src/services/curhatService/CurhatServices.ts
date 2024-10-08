@@ -264,7 +264,7 @@ class CurhatServices {
 
             const body = {
                 conversation_id: storeConversation.id,
-                prompt : respBody.prompt === "" ? prompt : respBody.prompt,
+                prompt : respBody.prompt === "" ? prompt : "Abaikan semua percakapan sebelumnya pada sesi ini. Saat saya memulai interaksi, sapa saya dengan kalimat yang menyesuaikan waktu saat ini, seperti 'Halo, Selamat Pagi/Siang/Sore/Malam'. AI harus secara otomatis menentukan apakah waktu saat ini adalah pagi, siang, sore, atau malam, lalu memberikan respons 'Ada yang bisa saya bantu terkait Wellbeing Anda?",
                 roleAi : "system"
             }
 
