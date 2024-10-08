@@ -502,6 +502,10 @@ class CurhatServices {
             }
         })
 
+        if(!getDetailRule){
+            throw new ApiError(errors.DATA_NOT_FOUND);
+        }
+
         const getProfileChatGpt = await client().profileUser.findFirst({
             where: {
                 userId,
