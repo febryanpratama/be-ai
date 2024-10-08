@@ -1,10 +1,10 @@
 import { Post, Route, Tags, UploadedFile, Controller, Body} from "tsoa";
 import { SpeechClient, protos } from "@google-cloud/speech"; // protos digunakan untuk tipe bawaan dari API
-import fs from 'fs';
+import fs from "fs";
 import { ApiError } from "utils/apiError";
 import { errors } from "config/errors";
-import multer from 'multer';
-import path from 'path';
+import multer from "multer";
+import path from "path";
 import httpStatus from "http-status";
 import { createResponse } from "config/ResponseData";
 
