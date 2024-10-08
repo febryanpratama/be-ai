@@ -258,7 +258,7 @@ class CurhatServices {
                     break;
             }
 
-            let currentHour = new Date().getHours();
+            const currentHour = new Date().getHours();
             let greeting;
 
             if (currentHour >= 5 && currentHour < 12) {
