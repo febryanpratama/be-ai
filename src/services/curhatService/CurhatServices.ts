@@ -262,15 +262,21 @@ class CurhatServices {
 
             const storeConversation = await this._storeConversation(respBody, userId);
 
-            const body = {
+            const bodySystem = {
                 conversation_id: storeConversation.id,
-                prompt : respBody.prompt === "" ? prompt : "Abaikan semua percakapan sebelumnya pada sesi ini. Saat saya memulai interaksi, sapa saya dengan kalimat yang menyesuaikan waktu saat ini, seperti 'Halo, Selamat Pagi/Siang/Sore/Malam'. AI harus secara otomatis menentukan apakah waktu saat ini adalah pagi, siang, sore, atau malam, lalu memberikan respons 'Ada yang bisa saya bantu terkait Wellbeing Anda?",
+                prompt : respBody.prompt === "" ? prompt : respBody.prompt,
                 roleAi : "system"
             }
 
-            const storeDetailConverstaion = await this.storeDetailCurhatSession(body, userId);
+            const bodyUser = {
+                conversation_id: storeConversation.id,
+                prompt : `Saat pengguna memulai interaksi, sapa pengguna dengan kalimat yang menyesuaikan waktu saat ini, seperti 'Halo, Selamat Pagi/Siang/Sore/Malam'. Tambahkan sapaan yang ramah dan ceria, seperti:'Hai, selamat [Pagi/Siang/Sore/Malam]! 🌟 Senang bertemu dengan Anda! Perkenalkan, saya adalah AI psikolog yang siap membantu menyelesaikan masalah wellbeing Anda. 😊 Apakah ada yang bisa saya bantu hari ini?'`,
+                roleAi : "user"
+            }
 
-            const getDetailCurhat = await this.detailCurhat(body, userId)
+            const storeDetailConverstaion = await this.storeDetailCurhatSession(bodySystem, bodyUser, userId);
+
+            const getDetailCurhat = await this.detailCurhat(bodySystem, userId)
 
 
             return getDetailCurhat;
@@ -339,18 +345,32 @@ class CurhatServices {
         return listDetailConversation
     }
 
-    public storeDetailCurhatSession = async (body: any, userId?: number): Promise<any> => {
+    public storeDetailCurhatSession = async (body: any,bodyUser?: any, userId?: number): Promise<any> => {
         const storeDetailConverstaion = await client().detailConversation.create({
             data: {
                 conversationId: body.conversation_id,
                 response: body.prompt,
                 isUser: true,
                 readeble: false,
-                roleAi: body.roleAi || "user"
+                roleAi: body.roleAi || "system"
             }
         })
 
-        const resp = await IntegrationChatGpt.postMbti(body.prompt);
+        if(bodyUser){
+            const storeDetailConversation = await client().detailConversation.create({
+                data: {
+                    conversationId: bodyUser.conversation_id,
+                    response: bodyUser.prompt,
+                    isUser: true,
+                    readeble: false,
+                    roleAi: bodyUser.roleAi || "user"
+                }
+            })
+        }
+
+        const prompt = bodyUser ? bodyUser.prompt : body.prompt
+
+        const resp = await IntegrationChatGpt.postMbti(prompt);
 
         const storeDetailConverstaionAI = await client().detailConversation.create({
             data: {
