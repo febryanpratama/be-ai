@@ -121,6 +121,15 @@ export class CurhatController extends Controller {
     }
 
 
+    @Get("get-rule/{conversationId}")
+    @Security("bearerAuth", [ScopeRole.USER])
+    public async getRule(conversationId: number, @Request() request: Context): Promise<any>{
+        const id = request.user.id;
+        const resp = await CurhatServices.getDetailRule(conversationId, Number(id))
+        this.setStatus(httpStatus.OK)
+        return createResponse(resp)
+    }
+
     @Patch("update-rule")
     @Security("bearerAuth", [ScopeRole.USER])
     public async updateRule(@Body() body: setRuleCurhatRequest, @Request() request: Context): Promise<any> {

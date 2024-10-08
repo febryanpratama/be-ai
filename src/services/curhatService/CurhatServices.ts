@@ -462,7 +462,7 @@ class CurhatServices {
             const prompt = `Sebagai psikolog berpengalaman menangani gender ${respBody.jenis_kelamin === "" ? "Wanita" : respBody.jenis_kelamin}, kamu akan menjadi AI dalam aplikasi yang membantu pengguna meningkatkan well-beingnya. Kamu berkomunikasi langsung dengan pengguna, sehingga tidak perlu merespon command prompt ini dan silakan mulai sapa pengguna dengan sapaan sesuai waktu (pagi, siang, sore, malam), gunakan selalu gaya komunikasi  ${respBody.gaya_bicara === "" ? "Friendly" : respBody.gaya_bicara} dan durasi panjang pendek komunikasi ${respBody.jenis_penyampaian === "" ? "Singkat" : respBody.jenis_penyampaian}, serta tolong berikan respon curhat yang positif. ${type}. Arahkan pembicaraan menjadi positif dan solutif tanpa menghakimi pengguna apabila dalam pembicaraan dengan pengguna muncul respon pengguna yang mengandung unsur Negative Thought Patterns seperti All-or-Nothing Thinking (Black-and-White Thinking), Overgeneralization, Mental Filtering that only Focusing solely on the negative aspects, Disqualifying the Positive, Jumping to Conclusions, Catastrophizing (Magnifying or Minimizing), Emotional Reasoning: Believing that feelings reflect reality, Should Statements, Labeling and Mislabeling, Personalization: Taking things too personally, Blaming Others,  Fallacy of Fairness, Perfectionism, Comparison, Mind Reading, Fortune Telling. Apabila respon Anda cukup panjang maka tolong pisahkan dengan spasi antar baris agar mudah dipahami.`;
 
 
-            const getConversationDetail = await client().detailConversation.updateMany({
+            const updateDetail = await client().detailConversation.updateMany({
                 where: {
                     conversationId: respBody.conversation_id,
                     roleAi: "system",
@@ -472,13 +472,52 @@ class CurhatServices {
                 }
             })
 
-            return getConversationDetail;
+            const updateConversation = await client().conversation.update({
+                where: {
+                    id : respBody.conversation_id
+                },
+                data: {
+                    type: respBody.tipe
+                }
+            })
+
+            return updateDetail;
         }catch (e) {
         //     err
             throw new ApiError(errors.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    public getDetailRule = async (conversationId: number, userId: number): Promise<any> => {
+        const getDetailRule = await client().detailConversation.findFirst({
+            where: {
+                conversationId,
+                roleAi: "system",
+                conversation: {    // Add this block to query the related Conversation table
+                    userId,  // Replace with your condition on the Conversation model
+                }
+            },
+            include: {
+                conversation: true
+            }
+        })
+
+        const getProfileChatGpt = await client().profileUser.findFirst({
+            where: {
+                userId,
+            }
+        })
+
+        const json = {
+            conversation_id: conversationId,
+            jenis_kelamin: getProfileChatGpt?.gender || "Wanita",
+            gaya_bicara: getProfileChatGpt?.gayaKomunikasi || "Friendly",
+            jenis_penyampaian: getProfileChatGpt?.durasiKomunikasi || "Singkat",
+            tipe: getDetailRule?.conversation.type
+        }
+
+        return json;
+    }
 }
 
 export default new CurhatServices();
