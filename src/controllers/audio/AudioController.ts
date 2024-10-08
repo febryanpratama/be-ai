@@ -35,7 +35,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-@Route("audio")
+@Route("api/audio")
 @Tags("Audio")
 export class AudioController extends Controller {
 
