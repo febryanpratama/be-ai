@@ -270,7 +270,7 @@ class CurhatServices {
 
             const bodyUser = {
                 conversation_id: storeConversation.id,
-                prompt : `Saat pengguna memulai interaksi, sapa pengguna dengan kalimat yang menyesuaikan waktu saat ini, seperti "Halo, Selamat Pagi/Siang/Sore/Malam". Tambahkan sapaan yang ramah dan ceria, seperti:"Hai, selamat [Pagi/Siang/Sore/Malam]! 🌟 Senang bertemu dengan Anda! Perkenalkan, saya adalah AI psikolog yang siap membantu menyelesaikan masalah wellbeing Anda. 😊 Apakah ada yang bisa saya bantu hari ini?"`,
+                prompt : "Saat pengguna memulai interaksi, sapa pengguna dengan kalimat yang menyesuaikan waktu saat ini, seperti Halo, Selamat Pagi/Siang/Sore/Malam. Tambahkan sapaan yang ramah dan ceria, seperti:Hai, selamat [Pagi/Siang/Sore/Malam]! 🌟 Senang bertemu dengan Anda! Perkenalkan, saya adalah AI psikolog yang siap membantu menyelesaikan masalah wellbeing Anda. 😊 Apakah ada yang bisa saya bantu hari ini?",
                 roleAi : "user"
             }
 
