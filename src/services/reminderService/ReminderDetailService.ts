@@ -2,9 +2,9 @@ import {client} from "root/src/db/db";
 import {ApiError} from "utils/apiError";
 import {errors} from "config/errors";
 import integrationChatGpt from "root/src/integration/IntegrationChatGpt";
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir } from "fs/promises";
 import { v4 as uuidv4 } from "uuid";
-import path from 'path';
+import path from "path";
 
 class ReminderDetailService {
     public get = async (reminderId: number): Promise<any> => {
@@ -25,14 +25,14 @@ class ReminderDetailService {
         try {
             // Decode Base64 image
             const base64Data = body.foto.replace(/^data:image\/\w+;base64,/, "");
-            const buffer = Buffer.from(base64Data, 'base64');
+            const buffer = Buffer.from(base64Data, "base64");
 
             // Generate unique file name using uuid
-            const fileExtension = 'png'; // Default to png, adjust dynamically if needed
+            const fileExtension = "png"; // Default to png, adjust dynamically if needed
             const uniqueFileName = `${uuidv4()}.${fileExtension}`;
 
             // Define the upload directory and file path
-            const uploadDir = './uploads';
+            const uploadDir = "./uploads";
             const filePath = path.join(uploadDir, uniqueFileName);
 
             // Ensure the upload directory exists
@@ -67,11 +67,11 @@ class ReminderDetailService {
             
             const messagePrompt = ([
                 {
-                    role: 'user',
+                    role: "user",
                     content: promptAi
                 },
                 { 
-                    role: 'user', 
+                    role: "user", 
                     content: body.tanggapan 
                 },
             ]);
