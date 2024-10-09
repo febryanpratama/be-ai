@@ -5,8 +5,28 @@ import express from "express";
 import { postRoutesMiddleware, preRoutesMiddleware } from "middleware";
 import { RegisterRoutes } from "root/build/routes";
 import { routes } from "routes";
+import { AudioController } from 'controllers/audio/AudioController'; 
+import {uploadMiddleware} from "middleware/context";
 
 const app = express();
+
+app.post("/api/audio/convert", uploadMiddleware, async (req, res, next) => {
+    try {
+        // Memastikan bahwa file ada dalam request
+        if (!req.file) {
+            return res.status(400).send({ message: "No file uploaded" });
+        }
+
+        // Memanggil controller TSOA
+        const audioController = new AudioController();
+        const audio = await audioController.convertAudioToText(req.file);
+
+        // Mengirim respons berupa audio file audio
+        res.json(audio);
+    } catch (error) {
+        next(error);
+    }
+});
 
 preRoutesMiddleware(app);
 

@@ -6,6 +6,10 @@ import {client} from "root/src/db/db";
 import {Session} from "@prisma/client";
 import {ApiError} from "utils/apiError";
 import { Request as ExpressRequest } from "express";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 interface Payload extends Pick<JWT, "payload"> {
   id: string;
@@ -95,3 +99,31 @@ export async function expressAuthentication(
 
   return {};
 }
+
+// Setup Multer storage to save file in local directory (./uploads)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "../../../uploads");
+    
+    // Create uploads folder if it doesn't exist
+    if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    console.debug(uploadPath);
+
+    cb(null, uploadPath); // Save to uploads directory
+  },
+  filename: (req, file, cb) => {
+      // Use original file name (you can modify this if necessary)
+      const uniqueSuffix = uuidv4();
+      const extension = path.extname(file.originalname); // Get file extension
+      const fileName = `${uniqueSuffix}${extension}`; // Generate new file name
+      cb(null, fileName);
+  }
+});
+
+// Initialize Multer with disk storage
+const upload = multer({ storage });
+
+export const uploadMiddleware = upload.single("file");
