@@ -17,3 +17,8 @@ export interface ReminderUpdateRequest {
     repeat: boolean;
     remind: number;
 }
+
+export interface ReminderDetailRequest {
+    tanggapan: string;
+    foto?: string;
+}

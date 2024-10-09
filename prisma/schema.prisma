@@ -181,11 +181,13 @@ model Reminder {
   WaktuEnd String
   Remind Boolean @default(false)
   countdown Int @default(1000)
+  isDone Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   user        User         @relation(fields: [userId], references: [id])
   category        Category @relation(fields: [categoryId], references: [id])
+  reminderDetail ReminderDetail[]
 }
 
 model CategoryDetail {
@@ -208,4 +210,16 @@ model Category {
   deletedAt      DateTime?
   categoryDetail CategoryDetail[]
   reminder Reminder[]
+}
+
+model ReminderDetail {
+  id Int @id @default(autoincrement())
+  reminderId Int
+  tanggapan String
+  foto String?
+  isUser Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  reminder        Reminder         @relation(fields: [reminderId], references: [id])
 }
