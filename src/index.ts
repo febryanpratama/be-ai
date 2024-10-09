@@ -7,6 +7,7 @@ import { RegisterRoutes } from "root/build/routes";
 import { routes } from "routes";
 import { AudioController } from 'controllers/audio/AudioController'; 
 import {uploadMiddleware} from "middleware/context";
+import path from "path";
 
 const app = express();
 
@@ -27,7 +28,9 @@ app.post("/api/audio/convert", uploadMiddleware, async (req, res, next) => {
         next(error);
     }
 });
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+app.use(express.json({ limit: '50mb' }));
 preRoutesMiddleware(app);
 
 RegisterRoutes(app);
