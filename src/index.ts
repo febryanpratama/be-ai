@@ -5,8 +5,8 @@ import express from "express";
 import { postRoutesMiddleware, preRoutesMiddleware } from "middleware";
 import { RegisterRoutes } from "root/build/routes";
 import { routes } from "routes";
-import { AudioController } from 'controllers/audio/AudioController'; 
-import {uploadMiddleware} from "middleware/context";
+import { AudioController } from "controllers/audio/AudioController";
+import { uploadMiddleware } from "middleware/context";
 import path from "path";
 
 const app = express();

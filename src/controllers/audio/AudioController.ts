@@ -31,7 +31,7 @@ export class AudioController extends Controller {
             const audioFilePath = file.path;  // get file path from upload 
             
             // Baca file audio yang telah di-upload
-            const audioBytes = fs.readFileSync(audioFilePath).toString('base64');
+            const audioBytes = fs.readFileSync(audioFilePath).toString("base64");
         
             const audioConfig: protos.google.cloud.speech.v1.RecognitionAudio = {
                 content: audioBytes,
