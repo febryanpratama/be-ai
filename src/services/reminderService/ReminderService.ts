@@ -1,6 +1,7 @@
 import {client} from "root/src/db/db";
 import {ApiError} from "utils/apiError";
 import {errors} from "config/errors";
+import { pusher } from "../../integration/pusher";
 
 class ReminderService {
     public get = async (userId: number): Promise<any> => {
@@ -102,6 +103,46 @@ class ReminderService {
         }
 
         return deleteReminder;
+    }
+
+    public getNotifReminder = async (): Promise<any> => {
+        const date = new Date((new Date).toLocaleString("en-US", {
+            timeZone: "Asia/Jakarta"
+        }));
+        const now = new Date();
+        const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(now.setHours(23, 59, 59, 999));
+        const currentHour = ("0" + date.getHours()).slice(-2)
+        const currentMinute = ("0" + date.getMinutes()).slice(-2)
+        const currentMinutePlus = ("0" + (date.getMinutes() +1)).slice(-2)
+        const hourNow = currentHour+":"+currentMinute;
+        const hourNowPlus = currentHour+":"+currentMinutePlus;
+
+
+        const dataReminder = await client().reminder.findMany({
+            where : {
+                tanggal: {
+                    gte: startOfDay, // Lebih besar atau sama dengan awal hari
+                    lte: endOfDay,   // Lebih kecil atau sama dengan akhir hari
+                },
+                WaktuStart: {
+                    gte: hourNow, // Lebih besar atau sama dengan awal jam
+                    lte: hourNowPlus, 
+                }
+            }
+        })
+
+        // send notif
+        dataReminder.map(async (item:any) => {
+            // send notif here
+            // console.log(item.nama_pengingat)
+            // Kirim notifikasi menggunakan Pusher
+            await pusher.trigger("notification-reminder-channel", `user-${item.userId}`, {
+                data:item
+            });
+        });
+
+        return dataReminder;
     }
 }
 
