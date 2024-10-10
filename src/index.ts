@@ -8,6 +8,8 @@ import { routes } from "routes";
 import { AudioController } from "controllers/audio/AudioController";
 import { uploadMiddleware } from "middleware/context";
 import path from "path";
+import cron from "node-cron";
+import  ReminderService  from "./services/reminderService/ReminderService";
 
 const app = express();
 
@@ -37,6 +39,11 @@ RegisterRoutes(app);
 app.use("/api", routes);
 
 postRoutesMiddleware(app);
+
+// Task scheduling with node-cron
+cron.schedule("* * * * *", () => {
+    ReminderService.getNotifReminder();  // Panggil task logic di sini
+});
 
 
 app.listen(process.env.PORT, () => {
